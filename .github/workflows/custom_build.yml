@@ -103,14 +103,7 @@ jobs:
         with:
           python-version: '3.9'
 
-      - name: Install ESP-IDF
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y wget git flex bison gperf python3-pip python3-setuptools cmake ninja-build ccache libffi-dev libssl-dev dfu-util
-          git clone -b v5.3.1 --depth 1 https://github.com/espressif/esp-idf.git ~/esp-idf
-          ~/esp-idf/install.sh esp32
-          . ~/esp-idf/export.sh
-          pip install 'esp-coredump~=1.10' 'ruamel.yaml' 'esp-idf-kconfig' 'pyclang~=0.4.2' || true
+      # Note: ESP-IDF handled by espressif/esp-idf-ci-action@v1 in build step
 
       - name: Generate Custom SDK Config
         run: |
@@ -176,12 +169,6 @@ jobs:
           # Configure flash size
           echo "CONFIG_ESPTOOLPY_FLASHSIZE=\"${{ github.event.inputs.flash_size }}\"" >> sdkconfig.defaults
 
-      - name: Set up ESP-IDF and Target
-        run: |
-          . ~/esp-idf/export.sh
-          export IDF_TARGET=${{ github.event.inputs.board_type }}
-          echo "IDF_TARGET=${{ github.event.inputs.board_type }}" >> $GITHUB_ENV
-
       - name: Download Bootloader
         run: |
           BOOTLOADER_URL="https://cdn.spookytools.com/bootloaders/${{ github.event.inputs.board_type }}.bin"
@@ -192,13 +179,13 @@ jobs:
             rm -f "$BOOTLOADER_PATH"
           }
 
-      - name: Clean and Build Project
-        env:
-          SDKCONFIG_DEFAULTS: "sdkconfig.defaults"
-        run: |
-          . ~/esp-idf/export.sh
-          idf.py clean
-          idf.py build
+      - name: Build firmware via ESP-IDF action
+        uses: espressif/esp-idf-ci-action@v1
+        with:
+          esp_idf_version: v5.3.1
+          target: ${{ github.event.inputs.board_type }}
+          path: '.'
+          command: idf.py build
 
       - name: Package Artifacts into ZIP
         run: |
