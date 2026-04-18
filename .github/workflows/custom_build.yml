@@ -108,7 +108,9 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y wget git flex bison gperf python3-pip python3-setuptools cmake ninja-build ccache libffi-dev libssl-dev dfu-util
           git clone -b v5.3.1 --depth 1 https://github.com/espressif/esp-idf.git ~/esp-idf
-          ~/esp-idf/install.sh
+          ~/esp-idf/install.sh esp32
+          . ~/esp-idf/export.sh
+          pip install 'esp-coredump~=1.10' 'ruamel.yaml' 'esp-idf-kconfig' 'pyclang~=0.4.2' || true
 
       - name: Generate Custom SDK Config
         run: |
