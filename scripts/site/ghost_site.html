@@ -7,21 +7,21 @@
     <style>
         /* CSS Variables for Colors and Fonts */
         :root {
-            --background-color: #0f1419;
-            --surface-color: #1a1f2a;
-            --primary-color: #00d9a3;
-            --secondary-color: #004d3a;
-            --accent-color: #3a86ff;
+            --background-color: #0a0a0f;
+            --surface-color: #12121a;
+            --primary-color: #ff6b00;
+            --secondary-color: #3e1900;
+            --accent-color: #9c27b0;
             --text-primary: #ffffff;
             --text-secondary: rgba(255, 255, 255, 0.7);
-            --gradient-1: linear-gradient(135deg, #00d9a3, #3a86ff);
-            --gradient-2: linear-gradient(45deg, #00a37d, #00d9a3);
+            --gradient-1: linear-gradient(135deg, #ff6b00, #9c27b0);
+            --gradient-2: linear-gradient(45deg, #cc5500, #ff6b00);
             --card-bg: rgba(18, 18, 26, 0.8);
-            --border-color: #00d9a3;
+            --border-color: #ff6b00;
             --tooltip-bg: #000000;
             --tooltip-text: #ffffff;
             --input-bg: rgba(30, 30, 30, 0.6);
-            --input-border: #00d9a3;
+            --input-border: #ff6b00;
             --font-display: 'Inter', sans-serif;
             --font-mono: 'JetBrains Mono', monospace;
             --font-body: 'Inter', sans-serif;
@@ -924,20 +924,23 @@
 </head>
 <body>
     <div class="container">
-        <h1>Maciek's Pentest Hub <span style="font-size:0.5em;opacity:0.6">(Ghost ESP v1.4.8 custom)</span></h1>
+        <h1>Maciek's Pentest Hub <span style='font-size:0.5em;opacity:0.6'>(Ghost ESP v1.4.8 PL custom)</span></h1>
         <!-- Tab Navigation -->
         <div class="tab">
-            <button class="tablinks active" onclick="openTab(event, 'Settings')" id="defaultTab">Settings</button>
-            <button class="tablinks" onclick="openTab(event, 'Help')">Help</button>
-            <button class="tablinks" onclick="openTab(event, 'SDCard')">SD Card</button>
+            <button class="tablinks active" onclick="openTab(event, 'Settings')" id="defaultTab">Ustawienia</button>
+            <button class="tablinks" onclick="openTab(event, 'Help')">Pomoc</button>
+            <button class="tablinks" onclick="openTab(event, 'SDCard')">Karta SD</button>
             <button class="tablinks" onclick="openTab(event, 'Terminal')">Terminal</button>
+            <button class="tablinks" onclick="openTab(event, 'QuickScans')">Szybkie skany</button>
+            <button class="tablinks" onclick="openTab(event, 'BLEAttacks')">BLE Ataki</button>
+            <button class="tablinks" onclick="openTab(event, 'History')">Historia</button>
         </div>
         <!-- Settings Tab Content -->
         <div id="Settings" class="tabcontent show">
             <div class="settings-grid">
                 <!-- WiFi/BLE Section -->
                 <div class="settings-section" id="miscellaneous_section">
-                    <h2>Miscellaneous Settings</h2>
+                    <h2>Ustawienia ogólne</h2>
 
                     <div class="input-group">
                         <label for="gps_rx_pin">GPS RX Pin
@@ -979,12 +982,12 @@
                 </div>
                 <!-- Connect to WiFi Section (Disabled) -->
                 <div class="settings-section" id="connect-wifi-section">
-                    <h2>WiFi Status</h2>
+                    <h2>Status WiFi</h2>
                     <div class="input-group">
                         <label for="station_ip">ESP32 Station IP:</label>
                         <input type="text" id="station_ip" placeholder="Not connected" readonly>
                     </div>
-                    <h2>Connect to WiFi Network</h2>
+                    <h2>Połącz z siecią WiFi</h2>
                     <div class="input-group">
                         <label for="wifi_ssid">WiFi SSID 
                             <span class="tooltip">?
@@ -1001,7 +1004,7 @@
                         </label>
                         <input type="text" id="wifi_password" placeholder="Enter WiFi Password">
                     </div>
-                    <button onclick="connectToWiFi()">Connect</button>
+                    <button onclick="connectToWiFi()">Połącz</button>
                 </div>
                 <!-- Evil Portal Section -->
                 <div class="settings-section" id="evil-portal-section">
@@ -1057,7 +1060,7 @@
                         </label>
                         <input type="text" id="portal_domain" placeholder="Enter Domain">
                     </div>
-                    <button onclick="startevilportal()">Start Evil Portal</button>
+                    <button onclick="startevilportal()">Uruchom Evil Portal</button>
                 </div>
                 <!-- Power Printer Section -->
                 <div class="settings-section" id="power-printer-section">
@@ -1102,7 +1105,7 @@
                             </select>
                         </div>
                     </div>
-                    <button onclick="sendtoprinter()">Send to Printer</button>
+                    <button onclick="sendtoprinter()">Wyślij do drukarki</button>
                 </div>
                 <!-- RGB Section -->
                 <div class="settings-section" id="rgb-section">
@@ -1213,7 +1216,7 @@
                     </div>
                 </div>
             </div>
-            <button onclick="saveSettings()">Save Settings</button>
+            <button onclick="saveSettings()">Zapisz ustawienia</button>
         </div>
         <!-- Help Tab Content -->
         <div id="Help" class="tabcontent">
@@ -1383,11 +1386,11 @@
                         </label>
                         <div class="file-wrapper">
                             <span id="upload-file-name">No files selected</span>
-                            <button class="small" onclick="document.getElementById('sdcard-upload').click()">Upload</button>
+                            <button class="small" onclick="document.getElementById('sdcard-upload').click()">Wgraj</button>
                             <input type="file" id="sdcard-upload" accept="*/*" onchange="document.getElementById('upload-file-name').innerText = this.files[0].name">
                         </div>
                     </div>
-                    <button onclick="uploadFile()">Upload</button>
+                    <button onclick="uploadFile()">Wgraj</button>
                 </div>
             </div>
         </div>
@@ -1399,11 +1402,72 @@
                 <div id="terminalOutput" class="terminal-output"></div>
                 <div class="terminal-input-container">
                     <input type="text" id="terminalInput" placeholder="Enter command...">
-                    <button onclick="sendTerminalCommand()">Send</button>
+                    <button onclick="sendTerminalCommand()">Wyślij</button>
                 </div>
             </div>
         </div>
-    </div>
+    
+        <!-- Custom: Szybkie skany -->
+        <div id="QuickScans" class="tabcontent">
+            <div class="settings-section">
+                <h2>⚡ Szybkie skany</h2>
+                <p style="opacity:0.7">Wysyła komendę, po wskazanym czasie automatycznie wysyła <code>stopscan</code>.</p>
+                <div class="input-group" style="display:flex;flex-wrap:wrap;gap:8px;margin-top:12px">
+                    <button onclick="quickScan('scanap', 30)">📡 AP scan (30s)</button>
+                    <button onclick="quickScan('scansta', 30)">👥 Stacje (30s)</button>
+                    <button onclick="quickScan('sniffprobe', 60)">🔍 Probe sniff (60s)</button>
+                    <button onclick="quickScan('sniffbeacon', 30)">📣 Beacon sniff (30s)</button>
+                    <button onclick="quickScan('sniffbt', 30)">🔵 BLE sniff (30s)</button>
+                    <button onclick="quickScan('sniffpmkid', 60)">🔐 PMKID (60s)</button>
+                    <button onclick="quickScan('packetcount', 30)">📊 PacketCount (30s)</button>
+                    <button onclick="quickScan('sigmon', 30)">📶 SignalMon (30s)</button>
+                </div>
+                <div style="margin-top:16px">
+                    <button onclick="sendQuick('stopscan')" style="background:var(--primary-color);color:#000">⏹ STOP</button>
+                </div>
+                <div id="quickScanStatus" style="margin-top:12px;font-family:var(--font-mono);opacity:0.8"></div>
+            </div>
+        </div>
+
+        <!-- Custom: BLE Ataki -->
+        <div id="BLEAttacks" class="tabcontent">
+            <div class="settings-section">
+                <h2>💣 BLE Ataki</h2>
+                <p style="opacity:0.7">Spam BLE advertisement&#39;ów. <strong>Tylko na własnym sprzęcie</strong> — art. 287 KK.</p>
+                <div class="input-group" style="display:flex;flex-wrap:wrap;gap:8px;margin-top:12px">
+                    <button onclick="quickScan('blespam -t apple', 20)">🍎 Apple Juice (20s)</button>
+                    <button onclick="quickScan('blespam -t google', 20)">🤖 Google Fast Pair (20s)</button>
+                    <button onclick="quickScan('blespam -t samsung', 20)">📱 Samsung (20s)</button>
+                    <button onclick="quickScan('blespam -t windows', 20)">🪟 Swift Pair (20s)</button>
+                    <button onclick="quickScan('blespam -t flipper', 20)">🐬 Flipper (20s)</button>
+                    <button onclick="quickScan('blespam -t all', 15)">💥 WSZYSTKO (15s)</button>
+                </div>
+                <h2 style="margin-top:24px">WiFi Ataki</h2>
+                <div class="input-group" style="display:flex;flex-wrap:wrap;gap:8px;margin-top:12px">
+                    <button onclick="quickScan('attack -t deauth', 15)">🔌 Deauth (15s)</button>
+                    <button onclick="quickScan('attack -t rickroll', 30)">🎵 Rickroll beacons (30s)</button>
+                    <button onclick="quickScan('attack -t beacon -r', 20)">📣 Beacon flood random (20s)</button>
+                    <button onclick="quickScan('attack -t probe', 30)">🎯 Karma probe (30s)</button>
+                </div>
+                <div style="margin-top:16px">
+                    <button onclick="sendQuick('stopscan')" style="background:var(--primary-color);color:#000">⏹ STOP wszystko</button>
+                </div>
+                <div id="bleStatus" style="margin-top:12px;font-family:var(--font-mono);opacity:0.8"></div>
+            </div>
+        </div>
+
+        <!-- Custom: Historia -->
+        <div id="History" class="tabcontent">
+            <div class="settings-section">
+                <h2>📜 Historia komend</h2>
+                <p style="opacity:0.7">Ostatnie 50 komend (localStorage przeglądarki). Klik = wyślij ponownie.</p>
+                <div style="margin-top:12px">
+                    <button onclick="clearHistory()">🗑 Wyczyść historię</button>
+                </div>
+                <ul id="historyList" style="margin-top:16px;list-style:none;padding:0;font-family:var(--font-mono);font-size:0.9em"></ul>
+            </div>
+        </div>
+</div>
     <!-- JavaScript for Interactivity -->
     <script>
 
@@ -2012,6 +2076,64 @@
 
         // Start polling for terminal updates
         updateTerminal();
-    </script>
+    
+        // --- Custom helpers (Szybkie skany / BLE Ataki / Historia) ---
+        function sendQuick(cmd) {
+            addHistory(cmd);
+            fetch('/api/command', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({command: cmd})
+            }).catch(e => console.error(e));
+        }
+
+        function quickScan(cmd, seconds) {
+            sendQuick(cmd);
+            const statusBoxes = ['quickScanStatus', 'bleStatus'];
+            const msg = `[${new Date().toLocaleTimeString()}] ▶ ${cmd} (auto-stop za ${seconds}s)`;
+            statusBoxes.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.textContent = msg;
+            });
+            setTimeout(() => {
+                sendQuick('stopscan');
+                statusBoxes.forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.textContent = `[${new Date().toLocaleTimeString()}] ⏹ stopscan wysłany po ${seconds}s`;
+                });
+            }, seconds * 1000);
+        }
+
+        function addHistory(cmd) {
+            const hist = JSON.parse(localStorage.getItem('mhub_hist') || '[]');
+            hist.unshift({cmd: cmd, ts: new Date().toISOString()});
+            const trimmed = hist.slice(0, 50);
+            localStorage.setItem('mhub_hist', JSON.stringify(trimmed));
+            renderHistory();
+        }
+
+        function renderHistory() {
+            const hist = JSON.parse(localStorage.getItem('mhub_hist') || '[]');
+            const list = document.getElementById('historyList');
+            if (!list) return;
+            list.innerHTML = '';
+            hist.forEach(item => {
+                const li = document.createElement('li');
+                li.style.cssText = 'padding:6px 10px;margin:4px 0;background:var(--card-bg);border-left:3px solid var(--primary-color);cursor:pointer;border-radius:4px';
+                const time = new Date(item.ts).toLocaleTimeString();
+                li.innerHTML = `<span style="opacity:0.5">${time}</span>  <strong>${item.cmd}</strong>`;
+                li.onclick = () => sendQuick(item.cmd);
+                list.appendChild(li);
+            });
+        }
+
+        function clearHistory() {
+            localStorage.removeItem('mhub_hist');
+            renderHistory();
+        }
+
+        // Render historii przy starcie
+        document.addEventListener('DOMContentLoaded', renderHistory);
+</script>
 </body>
 </html>
